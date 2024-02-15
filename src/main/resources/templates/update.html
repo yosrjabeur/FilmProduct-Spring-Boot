@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update films</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<balise th:insert="template :: header"></balise>
+<div class="container">
+    <h1>Modifier un Film</h1>
+    <form action="/film/update" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" th:value="${films.id}">
+        <p>
+            <label for="titre" class="form-Label ">Titre du film </label>
+            <input type="text" name="titre" id="titre" class="form-control"  th:value="${films.titre}">
+        </p>
+        <p>
+            <label for="description" class="form-label">Description: </label>
+            <textarea rows="5" class="form-control" name="description" id="description" th:utext="${films.description}"></textarea>
+        </p>
+        <p>
+            <label for="annee" class="form-Label">Année parution : </label>
+            <input type="number" min="1950" name="anneeparution" id="annee" class="form-control" th:value="${films.anneeparution}">
+        </p>
+        <p>
+            <label for="categorie" class="form-Label">Categorie: </label>
+            <select name="categorie" class="form-select" id="categorie" >
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.nom}"
+                        th:selected="${cat.id == films.categorie.id}">
+                </option>
+            </select>
+        </p>
+        <p>
+            <label for="acteurs" class="form-label">Acteurs : </label>
+            <select multiple name="acteurs" id="acteurs" class="form-select" >
+                <option th:each="acteur : ${acteurs}" th:value="${acteur.id}" th:text="${acteur.nom} + ' ' + ${acteur.prenom}"></option>
+            </select>
+        </p>
+        <label class="form-Label">file : </label>
+        <input class="form-select" type="file" name="file" />
+
+        <p><input type="submit" class="btn btn-outline-primary" value="Modifier"></p>
+    </form>
+</div>
+</body>

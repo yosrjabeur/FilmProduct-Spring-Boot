@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du film</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            color: #666;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+        .btn-back {
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Détails du film</h1>
+    <div th:object="${film}">
+        <h2 th:text="${film.titre}"></h2>
+        <div>
+            <img th:if="${film.photo != null}" th:src="@{'/photos/' + ${film.photo}}" alt="Photo du film"/>
+            <img th:unless="${film.photo != null}" src="/photos/no-image.png" alt="Image standard"/>
+        </div>
+        <p th:text="${film.description}"></p>
+        <h3>Acteurs :</h3>
+        <ul>
+            <li th:each="acteur : ${film.acteurs}" th:text="${acteur.nom}"></li>
+        </ul>
+    </div>
+    <a href="/film/all" class="btn btn-primary btn-back">Retour à la liste des films</a>
+</div>
+</body>
+</html>
