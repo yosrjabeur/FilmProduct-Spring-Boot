@@ -2,7 +2,11 @@ package com.example.project.service;
 
 import com.example.project.entities.Film;
 import com.example.project.repository.FilmRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -41,6 +45,13 @@ public class ServiceFilm implements IServiceFilm{
          return  filmRepository.findByCategorieId(categorieId);
     }
 
+    @Override
+    public Page<Film> findAllFilmsPage(int pageNum, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?
+                Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable= PageRequest.of(pageNum-1,pageSize,sort);
+        return filmRepository.findAll(pageable);
+    }
 }
 
 

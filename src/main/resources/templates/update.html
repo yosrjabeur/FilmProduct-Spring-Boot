@@ -35,14 +35,22 @@
         </p>
         <p>
             <label for="acteurs" class="form-label">Acteurs : </label>
-            <select multiple name="acteurs" id="acteurs" class="form-select" >
-                <option th:each="acteur : ${acteurs}" th:value="${acteur.id}" th:text="${acteur.nom} + ' ' + ${acteur.prenom}"></option>
+            <select multiple name="acteurs" id="acteurs" class="form-select">
+                <option th:each="acteur : ${acteurs}" th:value="${acteur.id}" th:text="${acteur.nom} + ' ' + ${acteur.prenom}"
+                        th:selected="${films.acteurs.contains(acteur)}">
+                </option>
             </select>
         </p>
-        <label class="form-Label">file : </label>
-        <input class="form-select" type="file" name="file" />
+
+        <p>
+            <label for="file" class="form-label">Nouvelle image : </label>
+            <input type="file" name="file" id="file" class="form-control">
+        </p>
+
 
         <p><input type="submit" class="btn btn-outline-primary" value="Modifier"></p>
     </form>
 </div>
+
 </body>
+</html>

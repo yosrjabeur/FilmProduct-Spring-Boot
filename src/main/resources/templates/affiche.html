@@ -42,10 +42,10 @@
         <thead class="table-dark">
         <tr>
             <th>#</th>
-            <th>TITRE</th>
+            <th><a th:href="@{'/film/page/'+${currentPage}+'?sortField=titre&sortDir='+${reverseSortDir}}">TITRE</a></th>
             <!-- <th>DESCRIPTION</th>-->
-             <th>ANNEE PARUTION</th>
-             <th>CATEGORIE</th>
+            <th><a th:href="@{'/film/page/'+${currentPage}+'?sortField=anneeparution&sortDir='+${reverseSortDir}}">ANNEE PARUTION</a></th>
+            <th>CATEGORIE</th>
              <th>ACTEUR</th>
             <th></th>
             <th></th>
@@ -80,7 +80,31 @@
             </tr>
             </tbody>
         </table>
+
+    <!-- Ajout de la barre de navigation entre les pages -->
+    <div class="text-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:class="${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/film/all(sortField=${sortField},sortDir=${sortDir})}" aria-label="Précédent">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li th:each="pageNumber: ${#numbers.sequence(1, totalPages)}"
+                    th:class="${currentPage == pageNumber ? 'page-item active' : 'page-item'}">
+                    <a class="page-link" th:href="@{/film/page/{pageNum}(pageNum=${pageNumber},sortField=${sortField},sortDir=${sortDir})}" th:text="${pageNumber}"></a>
+                </li>
+                <li class="page-item" th:class="${currentPage == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/film/page/{pageNum}(pageNum=${currentPage + 1},sortField=${sortField},sortDir=${sortDir})}" aria-label="Suivant">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+
+</div>
     <script th:inline="javascript">
         document.getElementById("categorieId").addEventListener("change", function() {
             this.form.submit();

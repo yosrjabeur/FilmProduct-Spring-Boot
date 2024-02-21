@@ -8,6 +8,7 @@ import com.example.project.service.IServiceActeur;
 import com.example.project.service.IServiceCategorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,27 @@ public class FilmController {
 
    @Autowired
     IServiceActeur iServiceActeur;
+
    private String upoloadDirectory=System.getProperty("user.dir")+"\\src\\main\\resources\\static\\photos";
     @GetMapping("all")
     public String listeFilms(Model model){
-        model.addAttribute("films",iServiceFilm.findAllFilms());
+        //model.addAttribute("films",iServiceFilm.findAllFilms());
         model.addAttribute("categories", iServiceCategorie.findAllCategories());
+        return findPagineted(1,"titre","asc",model);
+        //return "affiche";
+    }
+
+    @GetMapping("page/{pageNum}")
+    public String findPagineted( @PathVariable int pageNum,@RequestParam String sortField,@RequestParam String sortDir,Model model) {
+        int PAGE_SIZE=4;
+        Page<Film> page = iServiceFilm.findAllFilmsPage(pageNum, PAGE_SIZE,sortField,sortDir);
+        model.addAttribute("films", page.getContent());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDir",sortDir.equals("asc")? "desc":"asc");
         return "affiche";
     }
 
@@ -52,7 +69,6 @@ public class FilmController {
             if (acteurIds != null && !acteurIds.isEmpty()) {
                 List<Acteur> acteurs = iServiceActeur.findActeursByIds(acteurIds);
                 f.setActeurs(acteurs);
-
             }
             // Récupérer le nom original de la photo
             String fileName = multipartFile.getOriginalFilename();
@@ -66,7 +82,6 @@ public class FilmController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             // Affecter le nom de l'image à l'attribut photo du film
             f.setPhoto(fileName);
 
@@ -95,26 +110,34 @@ public class FilmController {
     }
 
     @PostMapping("update")
-    public String update(@ModelAttribute Film film, @RequestParam("file") MultipartFile multipartFile){
+    public String update(@ModelAttribute Film film, @RequestParam("file") MultipartFile multipartFile, @RequestParam(value = "acteurs", required = false) List<Integer> acteurIds) {
         try {
-            // Vérifier si une nouvelle image a été fournie
+            // Traitement de l'image
             if (!multipartFile.isEmpty()) {
-                // Récupérer le nom original de la nouvelle photo
                 String fileName = multipartFile.getOriginalFilename();
-
-                // Définir le chemin complet où sera sauvegardée la nouvelle image
                 Path filePath = Paths.get(upoloadDirectory, fileName);
-
-                // Écrire physiquement le fichier de la nouvelle image
                 try {
                     Files.write(filePath, multipartFile.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                // Mettre à jour le nom de la nouvelle image dans l'objet Film
                 film.setPhoto(fileName);
+            } else {
+                // Conserver l'image actuelle si aucun fichier n'est téléchargé
+                Film existingFilm = iServiceFilm.findFilmById(film.getId());
+                film.setPhoto(existingFilm.getPhoto());
             }
+
+            // Traitement des acteurs
+            if (acteurIds != null && !acteurIds.isEmpty()) {
+                List<Acteur> acteurs = iServiceActeur.findActeursByIds(acteurIds);
+                film.setActeurs(acteurs);
+            } else {
+                // Si aucun acteur n'est sélectionné, conserver la liste d'acteurs existante
+                Film existingFilm = iServiceFilm.findFilmById(film.getId());
+                film.setActeurs(existingFilm.getActeurs());
+            }
+
             // Mettre à jour le film dans la base de données
             iServiceFilm.updateFilm(film);
             return "redirect:/film/all";
