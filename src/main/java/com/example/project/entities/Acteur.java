@@ -1,5 +1,6 @@
 package com.example.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Acteur {
     private int id;
     private String nom;
     private String prenom;
+    @JsonIgnore
     @ManyToMany (mappedBy = "acteurs")
     private List<Film> films;
 }

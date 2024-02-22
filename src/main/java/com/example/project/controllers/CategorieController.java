@@ -5,6 +5,7 @@ import com.example.project.entities.Film;
 import com.example.project.service.IServiceCategorie;
 import com.example.project.service.IServiceFilm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class CategorieController {
     @GetMapping("delete/{id}")
     public String deletedelete(@PathVariable int id){
         Categorie sansCategorie = iServiceCategorie.findCategorieById(3);
-        List<Film> films= iServiceFilm.findByCategorieId(id);
+        Page<Film> films= iServiceFilm.findByCategorieId(id);
         for (Film film : films) {
             film.setCategorie(sansCategorie);
             iServiceFilm.updateFilm(film);

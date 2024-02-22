@@ -38,12 +38,25 @@ public class ServiceFilm implements IServiceFilm{
      }
 
     @Override
-    public List<Film> searchByTitre(String titre) {
-        return filmRepository.findByTitre(titre);
+    public Page<Film> searchByTitre(String titre) {
+        int PAGE_SIZE = 4;
+        int pageNum = 0;
+        String sortField = "titre";
+        String sortDir = "asc";
+
+        Pageable pageable = PageRequest.of(pageNum, PAGE_SIZE, Sort.by(Sort.Direction.fromString(sortDir), sortField));
+        return filmRepository.findByTitreContainingIgnoreCase(titre, pageable);
     }
-    public  List<Film> findByCategorieId(int categorieId){
-         return  filmRepository.findByCategorieId(categorieId);
+    public  Page<Film> findByCategorieId(int categorieId) {
+        int PAGE_SIZE = 4;
+        int pageNum = 0;
+        String sortField = "titre";
+        String sortDir = "asc";
+
+        Pageable pageable = PageRequest.of(pageNum, PAGE_SIZE, Sort.by(Sort.Direction.fromString(sortDir), sortField));
+        return filmRepository.findByCategorieId(categorieId, pageable);
     }
+
 
     @Override
     public Page<Film> findAllFilmsPage(int pageNum, int pageSize, String sortField, String sortDir) {

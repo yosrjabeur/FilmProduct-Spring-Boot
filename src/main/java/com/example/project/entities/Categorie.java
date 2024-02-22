@@ -1,5 +1,6 @@
 package com.example.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ public class Categorie {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nom;
+    @JsonIgnore
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
     List<Film> films;
 }

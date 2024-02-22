@@ -9,6 +9,9 @@ import com.example.project.service.IServiceCategorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -150,23 +153,55 @@ public class FilmController {
 
     @PostMapping("search")
     public String searchFilms(@RequestParam("searchKeyword") String searchKeyword, Model model) {
-        List<Film> films = iServiceFilm.searchByTitre(searchKeyword);
+        // Taille de la page
+        int PAGE_SIZE = 4;
+        // Page par défaut
+        int pageNum = 0;
+        // Champ de tri par défaut
+        String sortField = "titre";
+        // Direction de tri par défaut
+        String sortDir = "asc";
+
+        // Créer un objet Pageable pour la pagination et le tri
+        Pageable pageable = PageRequest.of(pageNum, PAGE_SIZE, Sort.by(Sort.Direction.fromString(sortDir), sortField));
+
+        // Appeler la méthode de service pour effectuer la recherche avec pagination et tri
+        Page<Film> page = iServiceFilm.searchByTitre(searchKeyword);
+
+        // Récupérer les films de la page
+        List<Film> films = page.getContent();
+
+        // Ajouter les attributs à passer à la vue
         model.addAttribute("films", films);
-        model.addAttribute("searchKeyword", searchKeyword); // Ajouter cette ligne pour transmettre la valeur de recherche à la vue
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("searchKeyword", searchKeyword);
+
         return "affiche";
     }
 
     @PostMapping("filterByCategory")
     public String filterByCategory(@RequestParam("categorieId") int categorieId, Model model) {
-        List<Film> films;
-        if (categorieId == 0) {
-            films = iServiceFilm.findAllFilms();
-        } else {
-            films = iServiceFilm.findByCategorieId(categorieId);
-        }
+        int PAGE_SIZE = 4;
+        int pageNum = 0;
+        String sortField = "titre";
+        String sortDir = "asc";
+
+        Page<Film> page = iServiceFilm.findByCategorieId(categorieId);
+        List<Film> films = page.getContent();
+
         model.addAttribute("films", films);
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("selectedCategoryId", categorieId);
         model.addAttribute("categories", iServiceCategorie.findAllCategories());
+
         return "affiche";
     }
 

@@ -11,8 +11,8 @@ public interface IServiceFilm {
     public List<Film> findAllFilms();
     public Film updateFilm(Film f);
     public void deleteFilm (int id);
-    List<Film> searchByTitre(String titre);
-    List<Film> findByCategorieId(int categorieId);
+    Page<Film> searchByTitre(String titre);
+    Page<Film> findByCategorieId(int categorieId);
     Page <Film> findAllFilmsPage(int pageNum, int pageSize, String sortField, String sortDir);
 
 }
