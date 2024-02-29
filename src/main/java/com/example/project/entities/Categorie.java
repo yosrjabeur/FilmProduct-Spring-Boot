@@ -16,7 +16,7 @@ public class Categorie {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nom;
-    @JsonIgnore
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<Film> films;
 }

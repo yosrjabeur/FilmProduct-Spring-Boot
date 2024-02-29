@@ -73,19 +73,14 @@ public class FilmController {
                 List<Acteur> acteurs = iServiceActeur.findActeursByIds(acteurIds);
                 f.setActeurs(acteurs);
             }
-            // Récupérer le nom original de la photo
             String fileName = multipartFile.getOriginalFilename();
-
-            // Définir le chemin complet où sera sauvegardée l'image
             Path filePath = Paths.get(upoloadDirectory, fileName);
 
-            // Écrire physiquement le fichier de l'image
             try {
                 Files.write(filePath, multipartFile.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Affecter le nom de l'image à l'attribut photo du film
             f.setPhoto(fileName);
 
             iServiceFilm.createFilm(f);
@@ -115,7 +110,6 @@ public class FilmController {
     @PostMapping("update")
     public String update(@ModelAttribute Film film, @RequestParam("file") MultipartFile multipartFile, @RequestParam(value = "acteurs", required = false) List<Integer> acteurIds) {
         try {
-            // Traitement de l'image
             if (!multipartFile.isEmpty()) {
                 String fileName = multipartFile.getOriginalFilename();
                 Path filePath = Paths.get(upoloadDirectory, fileName);
@@ -126,26 +120,19 @@ public class FilmController {
                 }
                 film.setPhoto(fileName);
             } else {
-                // Conserver l'image actuelle si aucun fichier n'est téléchargé
                 Film existingFilm = iServiceFilm.findFilmById(film.getId());
                 film.setPhoto(existingFilm.getPhoto());
             }
-
-            // Traitement des acteurs
             if (acteurIds != null && !acteurIds.isEmpty()) {
                 List<Acteur> acteurs = iServiceActeur.findActeursByIds(acteurIds);
                 film.setActeurs(acteurs);
             } else {
-                // Si aucun acteur n'est sélectionné, conserver la liste d'acteurs existante
                 Film existingFilm = iServiceFilm.findFilmById(film.getId());
                 film.setActeurs(existingFilm.getActeurs());
             }
-
-            // Mettre à jour le film dans la base de données
             iServiceFilm.updateFilm(film);
             return "redirect:/film/all";
         } catch (Exception e) {
-            // Gérer les erreurs
             e.printStackTrace();
             return "redirect:/film/modifier/" + film.getId();
         }
@@ -153,25 +140,13 @@ public class FilmController {
 
     @PostMapping("search")
     public String searchFilms(@RequestParam("searchKeyword") String searchKeyword, Model model) {
-        // Taille de la page
         int PAGE_SIZE = 4;
-        // Page par défaut
         int pageNum = 0;
-        // Champ de tri par défaut
         String sortField = "titre";
-        // Direction de tri par défaut
         String sortDir = "asc";
-
-        // Créer un objet Pageable pour la pagination et le tri
         Pageable pageable = PageRequest.of(pageNum, PAGE_SIZE, Sort.by(Sort.Direction.fromString(sortDir), sortField));
-
-        // Appeler la méthode de service pour effectuer la recherche avec pagination et tri
         Page<Film> page = iServiceFilm.searchByTitre(searchKeyword);
-
-        // Récupérer les films de la page
         List<Film> films = page.getContent();
-
-        // Ajouter les attributs à passer à la vue
         model.addAttribute("films", films);
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -192,7 +167,6 @@ public class FilmController {
 
         Page<Film> page = iServiceFilm.findByCategorieId(categorieId);
         List<Film> films = page.getContent();
-
         model.addAttribute("films", films);
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());

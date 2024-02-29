@@ -17,7 +17,7 @@ public class Acteur {
     private int id;
     private String nom;
     private String prenom;
-    @JsonIgnore
     @ManyToMany (mappedBy = "acteurs")
+    @JsonIgnore
     private List<Film> films;
 }

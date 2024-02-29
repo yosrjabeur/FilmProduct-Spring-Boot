@@ -24,7 +24,7 @@ public class CategorieController {
     @GetMapping("all")
     public String listCtegories(Model model) {
         model.addAttribute("categories", iServiceCategorie.findAllCategories());
-        return "index";
+        return "AllCategorie";
     }
     @GetMapping("newcategorie")
     public String afficheNewForm(Model model){

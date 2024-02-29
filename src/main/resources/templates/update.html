@@ -26,6 +26,10 @@
             <input type="number" min="1950" name="anneeparution" id="annee" class="form-control" th:value="${films.anneeparution}">
         </p>
         <p>
+            <label for="realisateur" class="form-Label ">Réalisateur du film </label>
+            <input type="text" name="realisateur" id="realisateur" class="form-control"  th:value="${films.realisateur}">
+        </p>
+        <p>
             <label for="categorie" class="form-Label">Categorie: </label>
             <select name="categorie" class="form-select" id="categorie" >
                 <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.nom}"

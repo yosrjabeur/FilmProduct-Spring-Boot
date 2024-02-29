@@ -27,5 +27,5 @@ public class Film {
     @ManyToMany
     private List <Acteur> acteurs;
     private String photo;
-
+    private String realisateur;
 }

@@ -17,7 +17,6 @@
             <input type="text" name="titre" id="titre" class="form-control" pattern="^[A-Z].*" required>
         </p>
         <p>
-            <!-- Affichage du message d'erreur -->
         <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
             <span th:text="${errorMessage}"></span>
         </div>
@@ -27,6 +26,10 @@
         <p>
             <label for="annee" class="form-Label">Année parution : </label>
             <input type="number" name="anneeparution" id="annee" class="form-control" min="1940" max="2024" required>
+        </p>
+        <p>
+            <label for="realisateur" class="form-Label ">Réalisateur du film </label>
+            <input type="text" name="realisateur" id="realisateur" class="form-control" pattern="^[A-Z].*" required>
         </p>
         <p>
             <label for="categorie" class="form-Label">Categorie: </label>

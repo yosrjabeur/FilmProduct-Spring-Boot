@@ -65,6 +65,11 @@ public class ServiceFilm implements IServiceFilm{
         Pageable pageable= PageRequest.of(pageNum-1,pageSize,sort);
         return filmRepository.findAll(pageable);
     }
+
+    @Override
+    public Boolean filmExist(int id) {
+        return filmRepository.existsById(id);
+    }
 }
 
 

@@ -15,4 +15,5 @@ public interface IServiceFilm {
     Page<Film> findByCategorieId(int categorieId);
     Page <Film> findAllFilmsPage(int pageNum, int pageSize, String sortField, String sortDir);
 
+    Boolean filmExist(int id);
 }

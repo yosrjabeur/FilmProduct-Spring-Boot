@@ -36,4 +36,9 @@ public class  ServiceCategorie implements IServiceCategorie {
 
     @Override
     public List<Categorie> findAllCategories(){ return categorieRepository.findAll();}
+
+    @Override
+    public Boolean CategorieExist(int id) {
+        return categorieRepository.existsById(id);
+    }
 }

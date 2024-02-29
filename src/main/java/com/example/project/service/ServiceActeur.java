@@ -35,4 +35,9 @@ public class ServiceActeur implements IServiceActeur{
     public void deleteActeur(int id){
         acteurRepository.deleteById(id);
     }
+
+    @Override
+    public Boolean ActeurExist(int id) {
+        return acteurRepository.existsById(id);
+    }
 }

@@ -50,6 +50,7 @@
             <img th:unless="${film.photo != null}" src="/photos/no-image.png" alt="Image standard"/>
         </div>
         <p th:text="${film.description}"></p>
+        <p class="card-text">Réalisateur : <span th:text="${film.realisateur}"></span></p>
         <h3>Acteurs :</h3>
         <ul>
             <li th:each="acteur : ${film.acteurs}" th:text="${acteur.nom}"></li>

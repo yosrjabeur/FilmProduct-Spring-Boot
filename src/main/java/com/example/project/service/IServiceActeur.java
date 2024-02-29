@@ -13,4 +13,5 @@ public interface IServiceActeur {
     public void deleteActeur(int id);
     List<Acteur> findActeursByIds(List<Integer> ids);
 
+    Boolean ActeurExist(int id);
 }

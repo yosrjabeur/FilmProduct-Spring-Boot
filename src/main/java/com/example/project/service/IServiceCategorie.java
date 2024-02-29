@@ -12,4 +12,6 @@ public interface IServiceCategorie {
     public Categorie updateCategorie(Categorie c);
     public void deleteCategorie (int id);
     Categorie findCategorieByName(String nom);
+
+    Boolean CategorieExist(int id);
 }
