@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeLeaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Liste des films</title>
@@ -11,7 +13,9 @@
 <balise th:insert="template :: header"></balise>
 <div class="container mt-4">
     <h1>Liste des acteurs</h1>
+    <div class="d-flex justify-content-between mb-3" sec:authorize="hasAuthority('ADMIN')">
     <a th:href="@{/acteur/newacteur}" class="btn btn-primary mb-3">Ajouter un acteur</a>
+    </div>
     <table class="table table-striped table-responsive-md">
         <thead>
         <tr>

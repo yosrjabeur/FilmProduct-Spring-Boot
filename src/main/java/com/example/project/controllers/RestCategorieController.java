@@ -47,7 +47,7 @@ public class RestCategorieController {
         return new ResponseEntity<>(updatedCategorie, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable int id) {
         iServiceCategorie.deleteCategorie(id);
         return new ResponseEntity<>("Category with id " + id + " has been deleted.", HttpStatus.OK);

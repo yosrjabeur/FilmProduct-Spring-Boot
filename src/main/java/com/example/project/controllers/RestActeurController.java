@@ -42,7 +42,7 @@ public class RestActeurController {
         return new ResponseEntity<>(updatedActeur, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteActeur(@PathVariable int id) {
         iServiceActeur.deleteActeur(id);
         return new ResponseEntity<>("Acteur with id " + id + " has been deleted.", HttpStatus.OK);

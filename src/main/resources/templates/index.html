@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeLeaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -10,6 +12,7 @@
     <body>
         <balise th:insert="template :: header"></balise>
         <div class="container mt-4">
+
            <center> <h1 style="margin-bottom: 30px;">Filmothèque</h1></center>
             <img src="/photos/films.png" alt="imageHome" style="width: 70%; display: block; margin-left: auto; margin-right: auto;">
             <center> <h2 style="margin-bottom: 30px; margin-top:30px;">Catégories de films</h2> </center>

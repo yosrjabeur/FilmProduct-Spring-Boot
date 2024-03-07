@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeLeaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Liste des films</title>
@@ -12,11 +14,9 @@
 <balise th:insert="template :: header"></balise>
 <div class="container mt-4">
     <h1>Liste des films</h1>
-    <!-- Bouton d'ajout d'un nouveau film -->
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between mb-3" sec:authorize="hasAuthority('ADMIN')">
     <a th:href="@{/film/new}" class="btn btn-primary">Ajouter un nouveau film</a>
     </div>
-    <!-- Formulaire de recherche -->
     <form action="#" th:action="@{/film/search}" method="post" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" name="searchKeyword" placeholder="Rechercher par titre" th:value="${searchKeyword}" />
@@ -25,7 +25,6 @@
         </div>
     </form>
 
-    <!-- Formulaire de filtre par catégorie -->
     <form action="#" th:action="@{/film/filterByCategory}" method="post" class="mb-3">
         <div class="d-flex justify-content-between mb-3">
             <select name="categorieId" id="categorieId" class="form-select">
@@ -38,7 +37,6 @@
          </div>
      </form>
 
-     <!-- Tableau des films -->
     <table class="table table-hover" >
         <thead class="table-dark">
         <tr>
@@ -71,12 +69,12 @@
                     <a th:href="@{/film/details/{id} (id=${f.id})}" class="btn btn-outline-warning">Détails</a>
                 </td>
 
-                <td>
-                    <a th:href="@{/film/delete/{id} (id=${f.id})}" class="btn btn-outline-danger" onclick="return confirm('Voulez vous vraiment supprimer ce film')">Supprimer</a>
-                </td>
-                <td>
-                    <a th:href="@{/film/modifier/{id} (id=${f.id})}" class="btn btn-outline-primary">Modifier</a>
-                </td>
+             <td sec:authorize="hasAuthority('ADMIN')">
+                 <a th:href="@{/film/delete/{id} (id=${f.id})}" class="btn btn-outline-danger" onclick="return confirm('Voulez vous vraiment supprimer ce film')">Supprimer</a>
+             </td>
+             <td sec:authorize="hasAuthority('ADMIN')">
+                 <a th:href="@{/film/modifier/{id} (id=${f.id})}" class="btn btn-outline-primary">Modifier</a>
+             </td>
 
             </tr>
             </tbody>

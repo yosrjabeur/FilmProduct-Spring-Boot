@@ -1,13 +1,9 @@
 package com.example.project.controllers;
-
-
 import com.example.project.entities.Acteur;
 import com.example.project.entities.Film;
-
 import com.example.project.service.IServiceActeur;
 import com.example.project.service.IServiceCategorie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.project.service.IServiceFilm;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,22 +62,16 @@ public class FilmController {
     }
 
     @PostMapping("add")
-    public String aff(@ModelAttribute Film f, @RequestParam(value = "acteurs", required = false) List<Integer> acteurIds, Model model, @RequestParam("file") MultipartFile multipartFile){
+    public String add( Film f, Model model, @RequestParam("file") MultipartFile multipartFile){
         try {
-            if (acteurIds != null && !acteurIds.isEmpty()) {
-                List<Acteur> acteurs = iServiceActeur.findActeursByIds(acteurIds);
-                f.setActeurs(acteurs);
-            }
             String fileName = multipartFile.getOriginalFilename();
             Path filePath = Paths.get(upoloadDirectory, fileName);
-
             try {
                 Files.write(filePath, multipartFile.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             f.setPhoto(fileName);
-
             iServiceFilm.createFilm(f);
             return "redirect:/film/all";
         } catch (Exception e) {
@@ -106,7 +95,6 @@ public class FilmController {
         model.addAttribute("acteurs", iServiceActeur.findAllActeurs());
         return "update";
     }
-
     @PostMapping("update")
     public String update(@ModelAttribute Film film, @RequestParam("file") MultipartFile multipartFile, @RequestParam(value = "acteurs", required = false) List<Integer> acteurIds) {
         try {
@@ -185,6 +173,4 @@ public class FilmController {
         model.addAttribute("film", film);
         return "details";
     }
-
-
 }

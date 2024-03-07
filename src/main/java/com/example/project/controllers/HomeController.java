@@ -1,5 +1,4 @@
 package com.example.project.controllers;
-
 import com.example.project.entities.Categorie;
 import com.example.project.entities.Film;
 import com.example.project.service.IServiceCategorie;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
 @Controller
